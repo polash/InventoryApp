@@ -14,9 +14,11 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -65,6 +67,17 @@ public class ProductDetails extends AppCompatActivity
         orderBtn = (ImageButton) findViewById(R.id.email_btn);
 
         mCurrentUri = getIntent().getData();
+
+        ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Log.v("URI", "URI" + mUri);
+                mBitmap = Utility.getBitmapFromUri(ProductDetails.this, imageView, mUri);
+                imageView.setImageBitmap(mBitmap);
+            }
+        });
 
         makeSaleBtn.setOnClickListener(new View.OnClickListener() {
             @Override

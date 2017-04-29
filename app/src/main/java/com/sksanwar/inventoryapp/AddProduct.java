@@ -23,7 +23,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -104,14 +103,6 @@ public class AddProduct extends AppCompatActivity
           }
       });
 
-        ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                imageView.setImageBitmap(Utility.getBitmapFromUri(AddProduct.this, imageView, mUri));
-            }
-        });
     }
 
     @Override
