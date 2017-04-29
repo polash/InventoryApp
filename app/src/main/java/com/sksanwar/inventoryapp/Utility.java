@@ -76,7 +76,6 @@ public class Utility {
             } else {
                 return image;
             }
-
         } catch (Exception e) {
             Log.e(LOG_TAG, "Failed to load image.", e);
             return null;
@@ -92,7 +91,6 @@ public class Utility {
         }
 
     }
-
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 

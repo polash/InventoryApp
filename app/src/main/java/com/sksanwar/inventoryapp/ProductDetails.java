@@ -24,21 +24,12 @@ import android.widget.Toast;
 
 import com.sksanwar.inventoryapp.data.ProductContract.ProductEntry;
 
-public class ProductDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ProductDetails extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PRODUCT_LOADER = 0;
-    private String name;
-    private String supplier;
-    private int quantity;
-    private int sold;
-    private double price;
-    private String photo;
-    private boolean mProductHasChanged = false;
-
     Uri mCurrentUri;
     Uri mUri;
-    private Bitmap mBitmap;
-
     TextView nameLabelTextView;
     ImageView imageView;
     TextView priceLabelTextView;
@@ -48,7 +39,14 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
     Button retriveBtn;
     TextView supplierEmail;
     ImageButton orderBtn;
-
+    private String name;
+    private String supplier;
+    private int quantity;
+    private int sold;
+    private double price;
+    private String photo;
+    private boolean mProductHasChanged = false;
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +238,6 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
                 }
             }
         });
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -255,9 +252,7 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
                 ProductEntry.COLUMN_PRODUCT_SALES,
                 ProductEntry.COLUMN_SUPPLIER_EMAIL,
                 ProductEntry.COLUMN_PRODUCT_PHOTO
-
         };
-
         return new CursorLoader(this,
                 mCurrentUri,
                 projection,
@@ -272,7 +267,6 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
-
         if (cursor.moveToFirst()) {
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int emailColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_EMAIL);

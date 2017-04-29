@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 import com.sksanwar.inventoryapp.data.ProductContract.ProductEntry;
 
-public class MainActivity extends AppCompatActivity  implements LoaderManager.LoaderCallbacks<Cursor>{
-
+public class MainActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PRODUCT_LOADER = 0;
     ProductCursorAdapter mCursorAdapter;
@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity  implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
         mCursorAdapter.swapCursor(data);
     }
 

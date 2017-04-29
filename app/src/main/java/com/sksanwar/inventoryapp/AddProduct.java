@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sksanwar.inventoryapp.data.ProductContract.ProductEntry;
-import com.sksanwar.inventoryapp.data.ProductDbHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,26 +43,21 @@ public class AddProduct extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int SOLD = 0;
+    private static final int PICK_IMAGE_REQUEST = 0;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     EditText nameEditText;
     EditText priceEditText;
     EditText quantityEditText;
     EditText supplierEmailEditText;
     ImageView imageView;
     Button imageButton;
-    private String userChoosenTask;
-
-    private static final int PICK_IMAGE_REQUEST = 0;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    private boolean isGalleryPicture = false;
-
-
     Uri mCurrentProductUri;
+    String mCurrentPhotoPath;
+    private String userChoosenTask;
+    private boolean mProductHasChanged = false;
+    private boolean isGalleryPicture = false;
     private Uri mUri;
     private Bitmap mBitmap;
-    String mCurrentPhotoPath;
-
-    private ProductDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +73,7 @@ public class AddProduct extends AppCompatActivity
 
         mCurrentProductUri = getIntent().getData();
 
+
         ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -91,32 +86,28 @@ public class AddProduct extends AppCompatActivity
       imageButton.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              final CharSequence[] items = { "Take Photo", "Choose from Library",
-                      "Cancel" };
-
+              final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
               AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
               builder.setTitle("Add Photo!");
               builder.setItems(items, new DialogInterface.OnClickListener() {
                   @Override
                   public void onClick(DialogInterface dialog, int item) {
                       boolean result=Utility.checkPermission(AddProduct.this);
-
                       if (items[item].equals("Take Photo")) {
                           userChoosenTask ="Take Photo";
                           if(result)
                               cameraIntent();
-
                       } else if (items[item].equals("Choose from Library")) {
                           userChoosenTask ="Choose from Library";
                           if(result)
                               galleryIntent();
-
                       } else if (items[item].equals("Cancel")) {
                           dialog.dismiss();
                       }
                   }
               });
               builder.show();
+
           }
       });
     }
@@ -166,7 +157,6 @@ public class AddProduct extends AppCompatActivity
     }
 
     private File createImageFile() throws IOException {
-
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
@@ -201,7 +191,7 @@ public class AddProduct extends AppCompatActivity
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Log.i(LOG_TAG, "Uri: " + mUri.toString());
 
-            mBitmap = Utility.getBitmapFromUri(AddProduct.this, imageView, mUri);;
+            mBitmap = Utility.getBitmapFromUri(AddProduct.this, imageView, mUri);
             imageView.setImageBitmap(mBitmap);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -231,13 +221,13 @@ public class AddProduct extends AppCompatActivity
         String priceString = priceEditText.getText().toString().trim();
         String quantityString = quantityEditText.getText().toString().trim();
         String emailString = supplierEmailEditText.getText().toString().trim();
-        String photoString;
+        String photoString = mUri.toString();
 
-        if (mUri != null) {
-            photoString = mUri.toString();
-        } else {
-            photoString = "";
-        }
+//        if (mUri != null) {
+//            photoString = mUri.toString();
+//        } else {
+//            photoString = String.valueOf(mUri);
+//        }
 
         if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
                 TextUtils.isEmpty(quantityString)) {
@@ -264,20 +254,15 @@ public class AddProduct extends AppCompatActivity
         values.put(ProductEntry.COLUMN_PRODUCT_SALES, SOLD);
         values.put(ProductEntry.COLUMN_PRODUCT_PHOTO, photoString);
 
-        // Insert a new pet into the provider, returning the content URI for the new pet.
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        if (mCurrentProductUri == null) {
+            Uri uri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+            if (uri == null) {
+                Toast.makeText(this, getString(R.string.error_saving_product), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.product_saved), Toast.LENGTH_SHORT).show();
+            }
 
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.error_saving_product),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.product_saved),
-                    Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -290,9 +275,7 @@ public class AddProduct extends AppCompatActivity
                 ProductEntry.COLUMN_PRODUCT_SALES,
                 ProductEntry.COLUMN_SUPPLIER_EMAIL,
                 ProductEntry.COLUMN_PRODUCT_PHOTO
-
         };
-
         return new CursorLoader(this,
                 mCurrentProductUri,
                 projection,
@@ -309,7 +292,7 @@ public class AddProduct extends AppCompatActivity
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-           // int emailColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_EMAIL);
+            //int emailColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_EMAIL);
            // int salesColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SALES);
             int photoColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHOTO);
 

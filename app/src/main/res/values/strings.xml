@@ -15,6 +15,17 @@
     <string name="sold_label">Sold</string>
     <string name="make_sell_btn">Make Sell</string>
     <string name="receive_btn">Receive Items</string>
+    <string name="add_img_btn">Add Image</string>
+    <string name="productName_label">Product Name</string>
+    <string name="enterName_hint">Enter Product Name</string>
+    <string name="price_label">Product Price</string>
+    <string name="price_hint">Enter Product Price</string>
+    <string name="quantity_label2">Product Quantity</string>
+    <string name="quantity_hint">Enter Product Quantity</string>
+    <string name="email_s">Supplier Email</string>
+    <string name="email_hint">Enter Supplier email</string>
+    <string name="price_label_lView">Price $</string>
+    <string name="sell_btn">Sell</string>
     <string name="delete_products_failed">Error with deleting all products</string>
     <string name="delete_products_successful">Products deleted</string>
     <string name="error_saving_product">Error Saving Product</string>
@@ -23,5 +34,6 @@
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
     <string name="product_updated">Product Updated</string>
+
 
 </resources>

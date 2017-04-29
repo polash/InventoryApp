@@ -19,7 +19,6 @@ import com.sksanwar.inventoryapp.data.ProductContract.ProductEntry;
  */
 
 public class ProductCursorAdapter extends CursorAdapter {
-    public static final String LOG_TAG = ProductCursorAdapter.class.getSimpleName();
     private Context mContexts;
 
     public ProductCursorAdapter(Context context, Cursor c) {
@@ -90,7 +89,7 @@ public class ProductCursorAdapter extends CursorAdapter {
                     if (rowsAffected == 0) {
                         Toast.makeText(v.getContext(), v.getContext().getString(R.string.error_updating_product), Toast.LENGTH_SHORT).show();
                     } else {
-                        //Toast.makeText(v.getContext(), "Sale Product " + nameColumn, Toast.LENGTH_SHORT).show();
+                        //
                     }
                 } else {
                     Toast.makeText(v.getContext(), "Order Product", Toast.LENGTH_SHORT).show();

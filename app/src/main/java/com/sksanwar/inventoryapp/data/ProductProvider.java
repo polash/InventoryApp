@@ -19,7 +19,6 @@ public class ProductProvider extends ContentProvider {
 
     public static final String LOG_TAG = ProductProvider.class.getSimpleName();
 
-
     private static final int PRODUCTS = 100;
     private static final int PRODUCTS_ID = 101;
 
@@ -35,13 +34,12 @@ public class ProductProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mDbHelper = new ProductDbHelper(getContext());
-
         return true;
     }
 
-
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
         Cursor cursor;
 
@@ -75,7 +73,6 @@ public class ProductProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
-
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -188,7 +185,6 @@ public class ProductProvider extends ContentProvider {
             }
         }
 
-
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         int numberRowsUpdated = db.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
@@ -199,7 +195,6 @@ public class ProductProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return numberRowsUpdated;
-
     }
 
     @Override
@@ -224,9 +219,7 @@ public class ProductProvider extends ContentProvider {
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-
         return rowsDeleted;
-
     }
 
     @Override
