@@ -47,6 +47,7 @@ public class Utility {
 
             parcelFileDescriptor =
                     context.getContentResolver().openFileDescriptor(uri, "r");
+
             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
 
             BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -56,7 +57,8 @@ public class Utility {
             int photoW = opts.outWidth;
             int photoH = opts.outHeight;
 
-            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+            int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+            Log.e(LOG_TAG, "Scaling the image" + scaleFactor);
 
             opts.inJustDecodeBounds = false;
             opts.inSampleSize = scaleFactor;
@@ -74,6 +76,7 @@ public class Utility {
             } else {
                 return image;
             }
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "Failed to load image.", e);
             return null;

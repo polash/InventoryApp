@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp"
-        android:paddingTop="16dp">
+        android:paddingBottom="@dimen/margin_16dp"
+        android:paddingLeft="@dimen/margin_64dp"
+        android:paddingRight="@dimen/margin_64dp"
+        android:paddingTop="@dimen/margin_16dp">
 
         <TextView
             android:id="@+id/name_detail"
@@ -20,16 +20,15 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceLarge"
-            android:textStyle="bold"
-            tools:text="Product"/>
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/imageView_detail"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"/>
 
@@ -37,15 +36,14 @@
             android:id="@+id/price_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:gravity="center"
-            android:textAppearance="?android:textAppearanceLarge"
-            tools:text="$5.99"/>
+            android:textAppearance="?android:textAppearanceLarge"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -54,8 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textAppearance="?android:textAppearanceLarge"
-                tools:text="7"/>
+                android:textAppearance="?android:textAppearanceLarge"/>
 
             <TextView
                 android:id="@+id/sold_detail"
@@ -63,14 +60,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textAppearance="?android:textAppearanceLarge"
-                tools:text="3"/>
+                android:textAppearance="?android:textAppearanceLarge"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -78,24 +74,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Quantity"
-                android:textAppearance="?android:textAppearanceLarge"
-                tools:text="Quantity"/>
+                android:text="@string/quantity_label"
+                android:textAppearance="?android:textAppearanceLarge"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Sold"
-                android:textAppearance="?android:textAppearanceLarge"
-                tools:text="Sold"/>
+                android:text="@string/sold_label"
+                android:textAppearance="?android:textAppearanceLarge"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:orientation="horizontal">
 
             <Button
@@ -103,27 +97,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="makeSellItems"
-                android:text="Make Sell"/>
+                android:text="@string/make_sell_btn"/>
 
             <Button
                 android:id="@+id/receive_detail_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="retriveItems"
                 android:layout_weight="1"
-                android:text="Receive Item"/>
+                android:text="@string/receive_btn"/>
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="@dimen/margin_48dp"
+            android:layout_marginBottom="@dimen/margin_16dp">
 
             <ImageButton
                 android:id="@+id/email_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/margin_48dp"
+                android:layout_height="@dimen/margin_48dp"
                 android:layout_alignParentRight="true"
                 android:background="@color/colorAccent"
                 app:srcCompat="@android:drawable/ic_dialog_email"/>

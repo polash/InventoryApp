@@ -87,7 +87,7 @@ public class ProductProvider extends ContentProvider {
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
-    
+
     /**
      * Insert a products into the database with the given content values. Return the new content URI
      * for that specific row in the database.

@@ -35,6 +35,7 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
     private String photo;
     private boolean mProductHasChanged = false;
 
+    Uri mCurrentUri;
     Uri mUri;
     private Bitmap mBitmap;
 
@@ -64,7 +65,7 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
         supplierEmail = (TextView) findViewById(R.id.supplier_detail);
         orderBtn = (ImageButton) findViewById(R.id.email_btn);
 
-        mUri = getIntent().getData();
+        mCurrentUri = getIntent().getData();
 
         makeSaleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +186,7 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.product_saved), Toast.LENGTH_SHORT).show();
             }
         } else {
-            int rowsAffected = getContentResolver().update(mUri, values, null, null);
+            int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
             if (rowsAffected == 0) {
                 Toast.makeText(this, getString(R.string.error_updating_product), Toast.LENGTH_SHORT).show();
             } else {
@@ -213,8 +214,8 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
     }
 
     private void deleteProduct() {
-        if (mUri != null) {
-            int rowsDeleted = getContentResolver().delete(mUri, null, null);
+        if (mCurrentUri != null) {
+            int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
             if (rowsDeleted == 0) {
                 Toast.makeText(this, getString(R.string.delete_products_failed), Toast.LENGTH_SHORT).show();
             } else {
@@ -258,7 +259,7 @@ public class ProductDetails extends AppCompatActivity implements LoaderManager.L
         };
 
         return new CursorLoader(this,
-                ProductEntry.CONTENT_URI,
+                mCurrentUri,
                 projection,
                 null,
                 null,

@@ -52,12 +52,12 @@ public class ProductCursorAdapter extends CursorAdapter {
         String quantityStatement = String.valueOf(quantityColumn);
         String soldStatement = String.valueOf(salesColumn);
 
+        final Uri currentProductUri = ProductEntry.buildProductUri(id);
+
         nameTextView.setText(nameColumn);
         quantityTextView.setText(quantityStatement);
         salesTextView.setText(soldStatement);
         priceTextView.setText(priceStatement);
-
-        final Uri currentProductUri = ProductEntry.buildProductUri(id);
 
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
