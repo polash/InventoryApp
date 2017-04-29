@@ -4,11 +4,22 @@
     <string name="save">save</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
 
-    <string name="error_updating_product">Error updating Product</string>
+    <string name="order_products">Please Order Products</string>
+    <string name="error_updating_product">Product Not Updated</string>
     <string name="empty_view_title_text">It\'s a bit lonely here...</string>
     <string name="empty_view_subtitle_text">Get started by adding a products</string>
     <string name="delete_dialog_msg">Delete All Products ?</string>
-
+    <string name="delete_this_product">Delete This Product ?</string>
+    <string name="product_saved_msg">Product Saved</string>
+    <string name="product_saved_without_img">Product Saved without Image</string>
+    <string name="notValid_entry">Not A Valid Entry</string>
+    <string name="product_exists_msg">Product Already Exists</string>
+    <string name="msg_all_data">Please Enter All Required Data</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="add_photo">Add Photo!</string>
+    <string name="select_pic">Select Picture</string>
+    <string name="permission_msg">Please allow permission to access</string>
+    <string name="choose_from_library">Choose from Library</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="quantity_label">Quantity</string>
@@ -23,12 +34,13 @@
     <string name="quantity_label2">Product Quantity</string>
     <string name="quantity_hint">Enter Product Quantity</string>
     <string name="email_s">Supplier Email</string>
-    <string name="email_hint">Enter Supplier email</string>
+    <string name="email_hint">example@example.com</string>
+    <string name="valid_email">Not a Valid Email Address</string>
     <string name="price_label_lView">Price $</string>
     <string name="sell_btn">Sell</string>
     <string name="delete_products_failed">Error with deleting all products</string>
-    <string name="delete_products_successful">Products deleted</string>
-    <string name="error_saving_product">Error Saving Product</string>
+    <string name="delete_products_successful">Product deleted</string>
+    <string name="error_saving_product">Product Not Saved</string>
     <string name="product_saved">Product Saved</string>
     <string name="unsaved_changes_dialog_msg">Discard Changes and quit editing?</string>
     <string name="discard">Discard</string>

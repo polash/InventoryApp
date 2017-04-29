@@ -114,6 +114,7 @@ public class ProductProvider extends ContentProvider {
         String  photo = values.getAsString(ProductEntry.COLUMN_PRODUCT_PHOTO);
         if (photo == null) {
             throw new IllegalArgumentException("Product requires a photo");
+
         }
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();

@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity
                 ProductEntry.COLUMN_PRODUCT_SALES,
                 ProductEntry.COLUMN_SUPPLIER_EMAIL,
                 ProductEntry.COLUMN_PRODUCT_PHOTO
-
         };
 
         return new CursorLoader(this,

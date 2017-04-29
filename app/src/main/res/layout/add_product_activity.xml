@@ -29,20 +29,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/productName_label" />
+            android:text="@string/productName_label"
+            android:textSize="@dimen/text_size_16sp" />
 
         <EditText
             android:id="@+id/name_add_product_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:capitalize="words"
             android:hint="@string/enterName_hint"
             android:maxLines="1"/>
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/price_label" />
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/price_label"
+            android:textSize="@dimen/text_size_16sp" />
 
         <EditText
             android:id="@+id/price_add_product_editText"
@@ -55,8 +59,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/quantity_label2" />
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/quantity_label2"
+            android:textSize="@dimen/text_size_16sp" />
 
         <EditText
             android:id="@+id/quantity_add_product_editText"
@@ -69,8 +74,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/email_s" />
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/email_s"
+            android:textSize="@dimen/text_size_16sp" />
 
         <EditText
             android:id="@+id/supplier_add_product_editText"

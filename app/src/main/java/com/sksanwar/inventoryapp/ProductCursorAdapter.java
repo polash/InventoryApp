@@ -87,15 +87,15 @@ public class ProductCursorAdapter extends CursorAdapter {
 
                     int rowsAffected = context.getContentResolver().update(currentProductUri, values, null, null);
                     if (rowsAffected == 0) {
-                        Toast.makeText(v.getContext(), v.getContext().getString(R.string.error_updating_product), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), v.getContext().getString(R.string.error_updating_product),
+                                Toast.LENGTH_SHORT).show();
                     } else {
                         //
                     }
                 } else {
-                    Toast.makeText(v.getContext(), "Order Product", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(v.getContext(), v.getContext().getString(R.string.order_products),
+                            Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,7 +90,8 @@ public class ProductDetails extends AppCompatActivity
                     quantityLabelTextView.setText(String.valueOf(quantity));
                     saleLabelTextView.setText(String.valueOf(sold));
                 } else {
-                    Toast.makeText(v.getContext(), "Order Product", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), v.getContext().getString(R.string.order_products),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -168,15 +170,21 @@ public class ProductDetails extends AppCompatActivity
     }
 
     private void saveProduct() {
+
         String quantityString = quantityLabelTextView.getText().toString().trim();
         String soldString = saleLabelTextView.getText().toString().trim();
 
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+
         ContentValues values = new ContentValues();
 
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(ProductEntry.COLUMN_PRODUCT_SALES, soldString);
 
-        if (mUri == null) {
+        if (mCurrentUri == null) {
             Uri uri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
             if (uri == null) {
                 Toast.makeText(this, getString(R.string.error_saving_product), Toast.LENGTH_SHORT).show();
@@ -191,7 +199,6 @@ public class ProductDetails extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.product_updated), Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private void showUnsavedChangesDialog(
@@ -225,7 +232,7 @@ public class ProductDetails extends AppCompatActivity
 
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setMessage(R.string.delete_this_product);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteProduct();
@@ -302,6 +309,4 @@ public class ProductDetails extends AppCompatActivity
         quantityLabelTextView.clearComposingText();
         priceLabelTextView.clearComposingText();
     }
-
-
 }

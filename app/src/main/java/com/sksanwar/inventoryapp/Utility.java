@@ -27,13 +27,11 @@ import java.io.IOException;
 
 public class Utility {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-
     public static final String LOG_TAG = Utility.class.getSimpleName();
 
     private Utility() {}
 
     public static Bitmap getBitmapFromUri(Context context,ImageView imageView, Uri uri) {
-
         if (uri == null) {
             return null;
         }
@@ -44,7 +42,6 @@ public class Utility {
         ParcelFileDescriptor parcelFileDescriptor = null;
         Bitmap image;
         try {
-
             parcelFileDescriptor =
                     context.getContentResolver().openFileDescriptor(uri, "r");
 
@@ -71,7 +68,8 @@ public class Utility {
                 Matrix mat = new Matrix();
                 int degree = 90;
                 mat.postRotate(degree);
-                Bitmap imageRotate = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), mat, true);
+                Bitmap imageRotate = Bitmap.createBitmap(image, 0, 0,
+                        image.getWidth(), image.getHeight(), mat, true);
                 return imageRotate;
             } else {
                 return image;
@@ -89,11 +87,9 @@ public class Utility {
                 Log.e(LOG_TAG, "Error closing ParcelFile Descriptor");
             }
         }
-
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-
     public static boolean checkPermission(final Context context)
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;

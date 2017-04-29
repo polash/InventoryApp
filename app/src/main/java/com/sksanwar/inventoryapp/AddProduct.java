@@ -29,12 +29,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.sksanwar.inventoryapp.data.ProductContract;
 import com.sksanwar.inventoryapp.data.ProductContract.ProductEntry;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 import static com.sksanwar.inventoryapp.Utility.LOG_TAG;
@@ -73,6 +76,33 @@ public class AddProduct extends AppCompatActivity
 
         mCurrentProductUri = getIntent().getData();
 
+      imageButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              final CharSequence[] items = {getString(R.string.take_photo),
+                      getString(R.string.choose_from_library), getString(R.string.cancel)};
+              AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
+              builder.setTitle(getString(R.string.add_photo));
+              builder.setItems(items, new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int item) {
+                      boolean result=Utility.checkPermission(AddProduct.this);
+                      if (items[item].equals(getString(R.string.take_photo))) {
+                          userChoosenTask = getString(R.string.take_photo);
+                          if(result)
+                              cameraIntent();
+                      } else if (items[item].equals(getString(R.string.choose_from_library))) {
+                          userChoosenTask = getString(R.string.choose_from_library);
+                          if(result)
+                              galleryIntent();
+                      } else if (items[item].equals(getString(R.string.cancel))) {
+                          dialog.dismiss();
+                      }
+                  }
+              });
+              builder.show();
+          }
+      });
 
         ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -82,34 +112,6 @@ public class AddProduct extends AppCompatActivity
                 imageView.setImageBitmap(Utility.getBitmapFromUri(AddProduct.this, imageView, mUri));
             }
         });
-
-      imageButton.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
-              AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
-              builder.setTitle("Add Photo!");
-              builder.setItems(items, new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int item) {
-                      boolean result=Utility.checkPermission(AddProduct.this);
-                      if (items[item].equals("Take Photo")) {
-                          userChoosenTask ="Take Photo";
-                          if(result)
-                              cameraIntent();
-                      } else if (items[item].equals("Choose from Library")) {
-                          userChoosenTask ="Choose from Library";
-                          if(result)
-                              galleryIntent();
-                      } else if (items[item].equals("Cancel")) {
-                          dialog.dismiss();
-                      }
-                  }
-              });
-              builder.show();
-
-          }
-      });
     }
 
     @Override
@@ -117,12 +119,12 @@ public class AddProduct extends AppCompatActivity
         switch (requestCode) {
             case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(userChoosenTask.equals("Take Photo"))
+                    if (userChoosenTask.equals(getString(R.string.take_photo)))
                         cameraIntent();
-                    else if(userChoosenTask.equals("Choose from Library"))
+                    else if (userChoosenTask.equals(getString(R.string.choose_from_library)))
                         galleryIntent();
                 } else {
-                    Toast.makeText(this, "Please allow permission to access", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_msg), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -139,14 +141,13 @@ public class AddProduct extends AppCompatActivity
         }
 
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_pic)), PICK_IMAGE_REQUEST);
     }
 
     public void cameraIntent(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try{
             File file =  createImageFile();
-
             mUri = FileProvider.getUriForFile(getApplication().getApplicationContext(),
                     "com.sksanwar.inventoryapp.fileprovider", file);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
@@ -221,18 +222,12 @@ public class AddProduct extends AppCompatActivity
         String priceString = priceEditText.getText().toString().trim();
         String quantityString = quantityEditText.getText().toString().trim();
         String emailString = supplierEmailEditText.getText().toString().trim();
-        String photoString = mUri.toString();
+        String photoString;
 
-//        if (mUri != null) {
-//            photoString = mUri.toString();
-//        } else {
-//            photoString = String.valueOf(mUri);
-//        }
-
-        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
-                TextUtils.isEmpty(quantityString)) {
-            Toast.makeText(this, "You must enter data", Toast.LENGTH_SHORT).show();
-            return;
+        if (mUri != null) {
+            photoString = mUri.toString();
+        } else {
+            photoString = "";
         }
 
         int quantity = 0;
@@ -254,15 +249,70 @@ public class AddProduct extends AppCompatActivity
         values.put(ProductEntry.COLUMN_PRODUCT_SALES, SOLD);
         values.put(ProductEntry.COLUMN_PRODUCT_PHOTO, photoString);
 
-        if (mCurrentProductUri == null) {
-            Uri uri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
-            if (uri == null) {
-                Toast.makeText(this, getString(R.string.error_saving_product), Toast.LENGTH_SHORT).show();
+        if (isProductExist(nameString)) {
+            Toast.makeText(this, getString(R.string.product_exists_msg),
+                    Toast.LENGTH_SHORT).show();
+        } else if (isValueInvalid(nameString) ||
+                isValueInvalid(price) ||
+                isValueInvalid(quantity)) {
+            Toast.makeText(this, getString(R.string.msg_all_data),
+                    Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, getString(R.string.notValid_entry));
+        } else if (!isEmailValid(emailString)) {
+            Toast.makeText(this, getString(R.string.valid_email), Toast.LENGTH_SHORT).show();
+        } else {
+            this.getContentResolver()
+                    .insert(ProductContract.ProductEntry.CONTENT_URI, values);
+            if (photoString.isEmpty()) {
+                Toast.makeText(this, getString(R.string.product_saved_without_img),
+                        Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, getString(R.string.product_saved), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.product_saved_msg), Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "Product created into db");
             }
-
         }
+    }
+
+    private boolean isProductExist(String name) {
+        Cursor cursor = this.getContentResolver().query(
+                ProductContract.ProductEntry.CONTENT_URI,
+                new String[]{ProductEntry.COLUMN_PRODUCT_NAME},
+                ProductEntry.COLUMN_PRODUCT_NAME + " = ?",
+                new String[]{name},
+                null);
+
+        boolean productExists;
+
+        if (cursor != null) {
+            productExists = cursor.getCount() > 0;
+            cursor.close();
+        } else {
+            productExists = false;
+        }
+        return productExists;
+    }
+
+    private boolean isValueInvalid(String string) {
+        return string == null || string.equals("");
+    }
+
+    private boolean isValueInvalid(int num) {
+        return num < 0;
+    }
+
+    private boolean isValueInvalid(double num) {
+        return num < 0;
+    }
+
+    public boolean isEmailValid(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        return matcher.matches();
     }
 
     @Override
@@ -292,16 +342,12 @@ public class AddProduct extends AppCompatActivity
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            //int emailColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_EMAIL);
-           // int salesColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SALES);
             int photoColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHOTO);
 
             String name = cursor.getString(nameColumnIndex);
-            //int sales = cursor.getInt(salesColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             double price = cursor.getDouble(priceColumnIndex);
             String photo = cursor.getString(photoColumnIndex);
-            //String email = cursor.getString(emailColumnIndex);
 
             nameEditText.setText(name);
             quantityEditText.setText(Integer.toString(quantity));
